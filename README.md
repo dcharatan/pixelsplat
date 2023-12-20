@@ -2,6 +2,10 @@
 
 This is the code for **pixelSplat: 3D Gaussian Splats from Image Pairs for Scalable Generalizable 3D Reconstruction** by David Charatan, Sizhe Li, Andrea Tagliasacchi, and Vincent Sitzmann.
 
+<video controls autoplay>
+  <source src="assets/teaser.mp4" type="video/mp4">
+</video>
+
 ## Installation
 
 To get started, create a virtual environment using Python 3.10+:
