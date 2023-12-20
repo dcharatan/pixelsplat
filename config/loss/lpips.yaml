@@ -1,3 +1,0 @@
-lpips:
-  weight: 0.05
-  apply_after_step: 150_000

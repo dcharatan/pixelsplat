@@ -1,0 +1,28 @@
+body {
+  font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+h2 {
+  font-size: 1.75rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.title {
+  text-align: center;
+}
+
+.teaser {
+  width: 75%;
+}
+
+.container {
+  max-width: 800px;
+}
+
+.tldr {
+  font-size: 1.1rem;
+}

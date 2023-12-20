@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description"
+    content="We introduce pixelSplat, a feed-forward model that learns to reconstruct 3D radiance fields parameterized by 3D Gaussian primitives from pairs of images.">
+  <meta property="og:title" content="pixelSplat: 3D Gaussian Splats from Image Pairs" />
+  <meta property="og:description" content="Novel view synthesis via feed-forward 3D Gaussian inference from two images." />
+  <meta property="og:url" content="https://pixelsplat.github.io/" />
+  <meta property="og:image" content="https://pixelsplat.github.io/static/images/banner.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:title" content="pixelSplat: 3D Gaussian Splats from Image Pairs">
+  <meta name="twitter:description" content="Novel view synthesis via feed-forward 3D Gaussian inference from two images.">
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <meta name="twitter:image" content="https://pixelsplat.github.io/static/images/banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Keywords for your paper to be indexed by-->
+  <meta name="keywords" content="NeRF, novel view synthesis, 3D Gaussians">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>pixelSplat</title>
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+
+  <link rel="stylesheet" href="static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css"> -->
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <!-- <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script> -->
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Title -->
+    <h1 class="pt-5 title">pixelSplat: 3D Gaussian Splats from Image Pairs for Scalable
+      Generalizable 3D Reconstruction</h1>
+    <div class="d-flex flex-row justify-content-center">
+      David Charatan, Sizhe Li, Andrea Tagliasacchi, and Vincent Sitzmann
+    </div>
+
+    <div class="w-100 d-flex flex-row justify-content-center mt-4 gap-2">
+      <!-- Paper PDF -->
+      <a href="https://arxiv.org/abs/2312.12337" target="_blank" class="btn btn-dark" role="button">
+        <span class="icon">
+          <i class="fas fa-file-pdf"></i>
+        </span>
+        <span>Paper</span>
+      </a>
+    </div>
+
+    <!-- Teaser -->
+    <div class="d-flex flex-row justify-content-center py-5">
+      <img src="static/images/teaser.svg" class="img-fluid teaser" alt="teaser image" />
+    </div>
+
+    <!-- TL;DR -->
+    <h2>TL;DR</h2>
+    <div class="alert alert-primary tldr mb-4">
+      pixelSplat infers a 3D Gaussian scene from two input views in a single forward pass.
+    </div>
+
+    <!-- Abstract -->
+    <h2>Abstract</h2>
+    <p class="mb-4">
+      We introduce pixelSplat, a feed-forward model that learns to reconstruct 3D radiance fields parameterized
+      by 3D Gaussian primitives from pairs of images. Our model features real-time and memory-efficient
+      rendering for scalable training as well as fast 3D reconstruction at inference time. To overcome local
+      minima inherent to sparse and locally supported representations, we predict a dense probability
+      distribution over 3D and sample Gaussian means from that probability distribution. We make this sampling
+      operation differentiable via a reparameterization trick, allowing us to back-propagate gradients through
+      the Gaussian splatting representation. We benchmark our method on wide-baseline novel view synthesis on
+      the real-world RealEstate10k and ACID datasets, where we outperform state-of-the-art light field
+      transformers and accelerate rendering by 2.5 orders of magnitude while reconstructing an interpretable and
+      editable 3D radiance field.
+    </p>
+
+    <!-- Comparisons -->
+    <h2>Comparison vs. Baselines</h2>
+    <p>We compare our method against the following baselines:</p>
+    <ul>
+      <li><a href="https://yilundu.github.io/wide_baseline/">The Method of Du et al.</a>: A light field renderer
+        designed for wide-baseline novel view synthesis.</li>
+      <li><a href="https://mohammedsuhail.net/gen_patch_neural_rendering/">GPNR</a>: A light field transformer which
+        struggles with only two input views.</li>
+      <li><a href="https://alexyu.net/pixelnerf/">pixelNeRF</a>: A well-known NeRF-based approach which struggles on
+        scene-scale datasets because it does not handle scale ambiguity.</li>
+    </ul>
+
+    <h3>ACID Dataset</h3>
+    <img src="static/images/comparison_acid.svg" class="img-fluid w-100 mt-2 mb-3" alt="comparison on ACID dataset" />
+    <div class="border w-100 mb-4">
+      <video class="w-100 d-block" autoplay controls muted loop>
+        <source src="static/videos/output_acid.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <h3>Real Estate 10k Dataset</h3>
+    <img src="static/images/comparison_re10k.svg" class="img-fluid w-100 mt-2 mb-3" alt="comparison on ACID dataset" />
+    <div class="border w-100 mb-4">
+      <video class="w-100 d-block" autoplay controls muted loop>
+        <source src="static/videos/output_re10k.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- Point Clouds -->
+    <h2>3D Gaussian Point Clouds</h2>
+    <p>Because pixelSplat infers a set of 3D Gaussians, we can visualize these Gaussians and render them to produce
+      depth maps. Since the Real Estate 10k and ACID datasets contain many areas with ambiguous depth (e.g., large,
+      textureless surfaces like interior walls), we fine-tune pixelSplat for 50,000 iterations using a depth regularizer
+      before exporting 3D Gaussian point clouds.</p>
+    <img src="static/images/point_clouds.svg" class="img-fluid w-100 mt-2 mb-3" alt="point clouds and depth maps" />
+
+    <!-- <p>Use the interactive 3D viewer below to explore a set of 3D Gaussians generated by pixelSplat. However, note that the renderings produced by the interactive Spline viewer do not exactly match those produced by the original CUDA-based implementation of 3D Gaussian splatting.</p>
+    <iframe src='https://my.spline.design/untitled-56829706657b783ffda8a7682085e706/' frameborder='0' width='100%' height='400px'></iframe> -->
+
+    <!-- Footer -->
+    <footer class="border-top mt-5 py-4">
+      This page's code uses elements from this <a href="https://github.com/eliahuhorwitz/Academic-project-page-template"
+        target="_blank">Academic Project Page
+        Template</a>.
+    </footer>
+  </div>
+</body>
+
+</html>
