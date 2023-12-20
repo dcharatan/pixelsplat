@@ -1,0 +1,52 @@
+defaults:
+  - backbone: resnet
+
+name: epipolar
+
+opacity_mapping:
+  initial: 0.0
+  final: 0.0
+  warm_up: 1
+
+num_monocular_samples: 32
+num_surfaces: 1
+predict_opacity: false
+near_disparity: 3.0
+
+gaussians_per_pixel: 3
+
+gaussian_adapter:
+  gaussian_scale_min: 0.5
+  gaussian_scale_max: 15.0
+  sh_degree: 4
+
+d_feature: 128
+
+epipolar_transformer:
+  self_attention:
+    patch_size: 4
+    num_octaves: 10
+    num_layers: 2
+    num_heads: 4
+    d_token: 128
+    d_dot: 128
+    d_mlp: 256
+  num_octaves: 10
+  num_layers: 2
+  num_heads: 4
+  num_samples: 32
+  d_dot: 128
+  d_mlp: 256
+  downscale: 4
+
+visualizer:
+  num_samples: 8
+  min_resolution: 256
+  export_ply: false
+
+apply_bounds_shim: true
+
+# Use this to ablate the epipolar transformer.
+use_epipolar_transformer: true
+
+use_transmittance: false

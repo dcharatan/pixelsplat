@@ -1,0 +1,22 @@
+# @package _global_
+
+defaults:
+  - override /dataset: re10k
+  - override /model/encoder: epipolar
+  - override /model/encoder/backbone: dino
+  - override /loss: [mse, lpips]
+
+wandb:
+  name: re10k
+  tags: [re10k, 256x256]
+
+dataset:
+  image_shape: [256, 256]
+  roots: [datasets/re10k]
+
+data_loader:
+  train:
+    batch_size: 7
+
+trainer:
+  max_steps: 300_001

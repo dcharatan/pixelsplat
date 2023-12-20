@@ -1,0 +1,201 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Train (Debug)",
+            "type": "python",
+            "request": "launch",
+            "module": "src.main",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "wandb.mode=disabled",
+                "+experiment=re10k",
+                "data_loader.train.num_workers=0",
+                "data_loader.test.num_workers=0",
+                "data_loader.val.num_workers=0",
+                "data_loader.train.batch_size=1",
+            ],
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "0",
+            }
+        },
+        {
+            "name": "Test (Debug)",
+            "type": "python",
+            "request": "launch",
+            "module": "src.main",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "wandb.mode=disabled",
+                "data_loader.train.num_workers=0",
+                "data_loader.test.num_workers=0",
+                "data_loader.val.num_workers=0",
+                "+experiment=re10k",
+                "mode=test",
+                "dataset/view_sampler=evaluation",
+                "checkpointing.load=checkpoints/re10k.ckpt",
+            ],
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "0",
+            }
+        },
+        {
+            "name": "Test Splatter",
+            "type": "python",
+            "request": "launch",
+            "module": "src.scripts.test_splatter",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [],
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "0",
+            }
+        },
+        {
+            "name": "Generate Evaluation Index",
+            "type": "python",
+            "request": "launch",
+            "module": "src.scripts.generate_evaluation_index",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "data_loader.train.num_workers=0",
+                "data_loader.test.num_workers=0",
+                "data_loader.val.num_workers=0",
+            ],
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "0",
+            }
+        },
+        {
+            "name": "Compute Metrics",
+            "type": "python",
+            "request": "launch",
+            "module": "src.scripts.compute_metrics",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "+experiment=re10k",
+                "+evaluation=re10k_video",
+            ],
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "0",
+            }
+        },
+        {
+            "name": "Paper: Generate Comparison Table",
+            "type": "python",
+            "request": "launch",
+            "module": "src.paper.generate_comparison_table",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "+experiment=re10k",
+                "+evaluation=ablation",
+            ]
+        },
+        {
+            "name": "Paper: Generate Image Comparison",
+            "type": "python",
+            "request": "launch",
+            "module": "src.paper.generate_image_comparison",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+        },
+        {
+            "name": "Paper: Generate Ablation Image Comparison",
+            "type": "python",
+            "request": "launch",
+            "module": "src.paper.generate_ablation_image_comparison",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "+experiment=re10k",
+                "+evaluation=ablation",
+            ]
+        },
+        {
+            "name": "Paper: Generate Epipolar Sampling Figure",
+            "type": "python",
+            "request": "launch",
+            "module": "src.paper.generate_epipolar_sampling_figure",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "+experiment=re10k",
+                "+evaluation=re10k",
+            ]
+        },
+        {
+            "name": "Paper: Generate Point Cloud Figure",
+            "type": "python",
+            "request": "launch",
+            "module": "src.paper.generate_point_cloud_figure",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "+experiment=re10k",
+                "checkpointing.load=checkpoints/re10k.ckpt"
+            ]
+        },
+        {
+            "name": "Paper: Generate Sampling Figure",
+            "type": "python",
+            "request": "launch",
+            "module": "src.paper.generate_sampling_figure",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "+experiment=re10k",
+                "checkpointing.load=checkpoints/re10k.ckpt"
+            ]
+        },
+        {
+            "name": "Paper: Generate Attention Figure",
+            "type": "python",
+            "request": "launch",
+            "module": "src.paper.generate_attention_figure",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "+experiment=re10k",
+                "checkpointing.load=checkpoints/re10k.ckpt"
+            ]
+        },
+        {
+            "name": "Paper: Generate Benchmark Table",
+            "type": "python",
+            "request": "launch",
+            "module": "src.paper.generate_benchmark_table",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "+experiment=re10k",
+                "+evaluation=re10k",
+            ]
+        },
+        {
+            "name": "Generate Video Evaluation Index",
+            "type": "python",
+            "request": "launch",
+            "module": "src.scripts.generate_video_evaluation_index",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [],
+        },
+        {
+            "name": "Dump Launch Configurations",
+            "type": "python",
+            "request": "launch",
+            "module": "src.scripts.dump_launch_configs",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [],
+        },
+    ]
+}

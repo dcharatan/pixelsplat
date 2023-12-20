@@ -1,0 +1,58 @@
+defaults:
+  - dataset: nmr
+  - optional dataset/view_sampler_dataset_specific_config: ${dataset/view_sampler}_${dataset}
+  - model/encoder: epipolar
+  - model/decoder: splatting_cuda
+  - loss: [mse, density]
+
+wandb:
+  project: pixelsplat
+  entity: your-entity-here
+  name: placeholder
+  mode: disabled
+
+mode: train
+
+dataset:
+  overfit_to_scene: null
+
+data_loader:
+  # Avoid having to spin up new processes to print out visualizations.
+  train:
+    num_workers: 16
+    persistent_workers: true
+    batch_size: 4
+    seed: 1234
+  test:
+    num_workers: 4
+    persistent_workers: false
+    batch_size: 1
+    seed: 2345
+  val:
+    num_workers: 1
+    persistent_workers: true
+    batch_size: 1
+    seed: 3456
+
+optimizer:
+  lr: 1.5e-4
+  warm_up_steps: 2000
+
+checkpointing:
+  load: null
+  every_n_train_steps: 5000
+  save_top_k: -1
+
+train:
+  depth_mode: null
+  extended_visualization: false
+
+test:
+  output_path: outputs/test
+
+seed: 111123
+
+trainer:
+  max_steps: -1
+  val_check_interval: 250
+  gradient_clip_val: 0.5

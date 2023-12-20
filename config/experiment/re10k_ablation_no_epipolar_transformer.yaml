@@ -1,0 +1,27 @@
+# @package _global_
+
+defaults:
+  - override /dataset: re10k
+  - override /model/encoder: epipolar
+  - override /model/encoder/backbone: dino
+  - override /loss: [mse, lpips]
+
+wandb:
+  name: re10k_ablation_no_epipolar_transformer
+  tags: [re10k, 256x256, ablation]
+
+dataset:
+  image_shape: [256, 256]
+  roots: [datasets/re10k]
+
+data_loader:
+  train:
+    batch_size: 7
+
+trainer:
+  max_steps: 300_001
+
+# Ablation: Turn off the epipolar transformer.
+model:
+  encoder:
+    use_epipolar_transformer: false

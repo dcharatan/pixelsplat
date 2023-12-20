@@ -1,0 +1,28 @@
+# @package _global_
+
+defaults:
+  - override /dataset: re10k
+  - override /model/encoder: epipolar
+  - override /model/encoder/backbone: dino
+  - override /loss: [mse, lpips]
+
+wandb:
+  name: re10k_ablation_no_probabilistic_sampling
+  tags: [re10k, 256x256, ablation]
+
+dataset:
+  image_shape: [256, 256]
+  roots: [datasets/re10k]
+
+data_loader:
+  train:
+    batch_size: 7
+
+trainer:
+  max_steps: 300_001
+
+# Ablation: Do not use probabilistic sampling and only predict one Gaussian per pixel.
+model:
+  encoder:
+    num_monocular_samples: 1
+    gaussians_per_pixel: 1
