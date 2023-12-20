@@ -2,9 +2,7 @@
 
 This is the code for **pixelSplat: 3D Gaussian Splats from Image Pairs for Scalable Generalizable 3D Reconstruction** by David Charatan, Sizhe Li, Andrea Tagliasacchi, and Vincent Sitzmann.
 
-<video controls autoplay>
-  <source src="assets/teaser.mp4" type="video/mp4">
-</video>
+https://github.com/dcharatan/pixelsplat/assets/13124225/5b568796-66ab-4d82-a220-717389dedb2f
 
 ## Installation
 
