@@ -148,7 +148,7 @@ class RaySegmentProjection(TypedDict):
     t_min: Float[Tensor, " *batch"]  # ray parameter
     t_max: Float[Tensor, " *batch"]  # ray parameter
     xy_min: Float[Tensor, "*batch 2"]  # image-space xy (normalized to 0 to 1)
-    xy_min: Float[Tensor, "*batch 2"]  # image-space xy (normalized to 0 to 1)
+    xy_max: Float[Tensor, "*batch 2"]  # image-space xy (normalized to 0 to 1)
 
     # Whether the segment overlaps the image. If not, the above values are meaningless.
     overlaps_image: Bool[Tensor, " *batch"]

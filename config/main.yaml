@@ -1,9 +1,9 @@
 defaults:
-  - dataset: nmr
+  - dataset: re10k
   - optional dataset/view_sampler_dataset_specific_config: ${dataset/view_sampler}_${dataset}
   - model/encoder: epipolar
   - model/decoder: splatting_cuda
-  - loss: [mse, density]
+  - loss: [mse]
 
 wandb:
   project: pixelsplat

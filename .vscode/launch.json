@@ -45,6 +45,22 @@
             }
         },
         {
+            "name": "Visualize Epipolar Lines",
+            "type": "python",
+            "request": "launch",
+            "module": "src.scripts.visualize_epipolar_lines",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "data_loader.train.num_workers=0",
+                "data_loader.test.num_workers=0",
+                "data_loader.val.num_workers=0",
+            ],
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "0",
+            }
+        },
+        {
             "name": "Test Splatter",
             "type": "python",
             "request": "launch",
