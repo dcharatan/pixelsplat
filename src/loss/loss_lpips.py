@@ -49,5 +49,6 @@ class LossLpips(Loss[LossLpipsCfg, LossLpipsCfgWrapper]):
         loss = self.lpips.forward(
             rearrange(prediction.color, "b v c h w -> (b v) c h w"),
             rearrange(image, "b v c h w -> (b v) c h w"),
+            normalize=True,
         )
         return self.cfg.weight * loss.mean()
