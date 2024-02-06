@@ -79,7 +79,6 @@ def generate_attention_figure(cfg_dict):
         step_tracker=None,
     )
     model_wrapper.eval()
-    dataset = iter(get_dataset(cfg.dataset, "test", None))
 
     # Create a dataset that always returns the desired scene.
     view_sampler_cfg = ViewSamplerArbitraryCfg(
