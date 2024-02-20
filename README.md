@@ -30,13 +30,14 @@ The Gaussian splatting CUDA code (`diff-gaussian-rasterization`) must be compile
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 ```
 
-- Install CUDA Toolkit 12.1 on your system. One approach (*try this at your own risk!*) is to install a second CUDA Toolkit version using the `runfile (local)` option [here](https://developer.nvidia.com/cuda-12-1-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=runfile_local). When you run the installer, disable the options that install GPU drivers and update the default CUDA symlinks. If you do this, you can point your system to CUDA 12.1 during installation as follows:
+- Install CUDA Toolkit 12.1 on your system. One approach (_try this at your own risk!_) is to install a second CUDA Toolkit version using the `runfile (local)` option [here](https://developer.nvidia.com/cuda-12-1-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=runfile_local). When you run the installer, disable the options that install GPU drivers and update the default CUDA symlinks. If you do this, you can point your system to CUDA 12.1 during installation as follows:
 
 ```bash
 LD_LIBRARY_PATH=/usr/local/cuda-12.1/lib64 pip install -r requirements.txt
 # If everything else was installed but you're missing diff-gaussian-rasterization, do:
 LD_LIBRARY_PATH=/usr/local/cuda-12.1/lib64 pip install git+https://github.com/dcharatan/diff-gaussian-rasterization-modified
 ```
+
 </details>
 
 ## Acquiring Datasets
@@ -96,6 +97,13 @@ Our extrinsics are OpenCV-style camera-to-world matrices. This means that +Z is 
 ## Figure Generation Code
 
 We've included the scripts that generate tables and figures in the paper. Note that since these are one-offs, they might have to be modified to be run.
+
+## Notes on Bugs
+
+Since the original release of the pixelSplat codebase, the following bugs have been identified:
+
+- The LPIPS loss was using the wrong input range (0 to 1 instead of -1 to 1). Results should be slightly better with this fixed. Thank you to Katja Schwarz for finding this bug!
+- The view sampler at `src/dataset/view_sampler/view_sampler_bounded.py` was incorrectly using `min_gap` in place of `max_gap` during training. This bug has been fixed, and the training configurations have been updated to reflect the unintended behavior, so this shouldn't affect the results. Note that views sampled during evaluation are chosen differently, so those were not affected. Thank you to Chris Wewer for finding this bug!
 
 ## BibTeX
 
