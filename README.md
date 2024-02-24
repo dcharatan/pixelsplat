@@ -75,8 +75,14 @@ Our code supports multi-GPU training. The above batch size is the per-GPU batch 
 To render frames from an existing checkpoint, run the following:
 
 ```bash
-python3 -m src.main +experiment=re10k mode=test dataset/view_sampler=evaluation checkpointing.load=checkpoints/re10k.ckpt
+# Real Estate 10k
+python3 -m src.main +experiment=re10k mode=test dataset/view_sampler=evaluation dataset.view_sampler.index_path=assets/evaluation_index_re10k.json checkpointing.load=checkpoints/re10k.ckpt
+
+# ACID
+python3 -m src.main +experiment=acid mode=test dataset/view_sampler=evaluation dataset.view_sampler.index_path=assets/evaluation_index_acid.json checkpointing.load=checkpoints/acid.ckpt
 ```
+
+Note that you can also use the evaluation indices that end with `_video` (in `/assets`) to render the videos shown on the website.
 
 ### Ablations
 
