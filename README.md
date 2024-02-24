@@ -13,6 +13,8 @@ To get started, create a virtual environment using Python 3.10+:
 ```bash
 python3.10 -m venv venv
 source venv/bin/activate
+# Install these first! Also, make sure you have python3.11-dev installed if using Ubuntu.
+pip install wheel torch torchvision torchaudio
 pip install -r requirements.txt
 ```
 
