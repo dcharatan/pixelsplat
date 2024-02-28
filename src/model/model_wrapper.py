@@ -332,16 +332,20 @@ class ModelWrapper(LightningModule):
         def trajectory_fn(t):
             extrinsics = interpolate_extrinsics(
                 batch["context"]["extrinsics"][0, 0],
-                batch["context"]["extrinsics"][0, 1]
-                if v == 2
-                else batch["target"]["extrinsics"][0, 0],
+                (
+                    batch["context"]["extrinsics"][0, 1]
+                    if v == 2
+                    else batch["target"]["extrinsics"][0, 0]
+                ),
                 t,
             )
             intrinsics = interpolate_intrinsics(
                 batch["context"]["intrinsics"][0, 0],
-                batch["context"]["intrinsics"][0, 1]
-                if v == 2
-                else batch["target"]["intrinsics"][0, 0],
+                (
+                    batch["context"]["intrinsics"][0, 1]
+                    if v == 2
+                    else batch["target"]["intrinsics"][0, 0]
+                ),
                 t,
             )
             return extrinsics[None], intrinsics[None]
@@ -367,16 +371,20 @@ class ModelWrapper(LightningModule):
             )
             extrinsics = interpolate_extrinsics(
                 batch["context"]["extrinsics"][0, 0],
-                batch["context"]["extrinsics"][0, 1]
-                if v == 2
-                else batch["target"]["extrinsics"][0, 0],
+                (
+                    batch["context"]["extrinsics"][0, 1]
+                    if v == 2
+                    else batch["target"]["extrinsics"][0, 0]
+                ),
                 t * 5 - 2,
             )
             intrinsics = interpolate_intrinsics(
                 batch["context"]["intrinsics"][0, 0],
-                batch["context"]["intrinsics"][0, 1]
-                if v == 2
-                else batch["target"]["intrinsics"][0, 0],
+                (
+                    batch["context"]["intrinsics"][0, 1]
+                    if v == 2
+                    else batch["target"]["intrinsics"][0, 0]
+                ),
                 t * 5 - 2,
             )
             return extrinsics @ tf, intrinsics[None]

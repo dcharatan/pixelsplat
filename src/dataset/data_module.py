@@ -60,6 +60,7 @@ class DataModule(LightningDataModule):
     data_loader_cfg: DataLoaderCfg
     step_tracker: StepTracker | None
     dataset_shim: DatasetShim
+    global_rank: int
 
     def __init__(
         self,
@@ -67,12 +68,14 @@ class DataModule(LightningDataModule):
         data_loader_cfg: DataLoaderCfg,
         step_tracker: StepTracker | None = None,
         dataset_shim: DatasetShim = lambda dataset, _: dataset,
+        global_rank: int = 0,
     ) -> None:
         super().__init__()
         self.dataset_cfg = dataset_cfg
         self.data_loader_cfg = data_loader_cfg
         self.step_tracker = step_tracker
         self.dataset_shim = dataset_shim
+        self.global_rank = global_rank
 
     def get_persistent(self, loader_cfg: DataLoaderStageCfg) -> bool | None:
         return None if loader_cfg.num_workers == 0 else loader_cfg.persistent_workers
@@ -81,7 +84,7 @@ class DataModule(LightningDataModule):
         if loader_cfg.seed is None:
             return None
         generator = Generator()
-        generator.manual_seed(loader_cfg.seed)
+        generator.manual_seed(loader_cfg.seed + self.global_rank)
         return generator
 
     def train_dataloader(self):
