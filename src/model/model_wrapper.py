@@ -167,21 +167,29 @@ class ModelWrapper(LightningModule):
                 deterministic=False,
             )
         with self.benchmarker.time("decoder", num_calls=v):
-            output = self.decoder.forward(
-                gaussians,
-                batch["target"]["extrinsics"],
-                batch["target"]["intrinsics"],
-                batch["target"]["near"],
-                batch["target"]["far"],
-                (h, w),
-            )
+            color = []
+            for i in range(0, batch["target"]["far"].shape[1], 32):
+                output = self.decoder.forward(
+                    gaussians,
+                    batch["target"]["extrinsics"][:1, i : i + 32],
+                    batch["target"]["intrinsics"][:1, i : i + 32],
+                    batch["target"]["near"][:1, i : i + 32],
+                    batch["target"]["far"][:1, i : i + 32],
+                    (h, w),
+                )
+                color.append(output.color)
+            color = torch.cat(color, dim=1)
 
         # Save images.
         (scene,) = batch["scene"]
         name = get_cfg()["wandb"]["name"]
         path = self.test_cfg.output_path / name
-        for index, color in zip(batch["target"]["index"][0], output.color[0]):
+        for index, color in zip(batch["target"]["index"][0], color[0]):
             save_image(color, path / scene / f"color/{index:0>6}.png")
+        for index, color in zip(
+            batch["context"]["index"][0], batch["context"]["image"][0]
+        ):
+            save_image(color, path / scene / f"context/{index:0>6}.png")
 
     def on_test_end(self) -> None:
         name = get_cfg()["wandb"]["name"]

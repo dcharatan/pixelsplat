@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from functools import partial
 from typing import Optional
 
+import torch
 from einops import rearrange
 from jaxtyping import Float
 from torch import Tensor, nn
@@ -42,17 +43,16 @@ class EpipolarTransformer(nn.Module):
         d_in: int,
     ) -> None:
         super().__init__()
+        num_context_views = get_cfg().dataset.view_sampler.num_context_views
+
         self.cfg = cfg
-        self.epipolar_sampler = EpipolarSampler(
-            get_cfg().dataset.view_sampler.num_context_views,
-            cfg.num_samples,
-        )
+        self.epipolar_sampler = EpipolarSampler(num_context_views, cfg.num_samples)
         if self.cfg.num_octaves > 0:
             self.depth_encoding = nn.Sequential(
                 (pe := PositionalEncoding(cfg.num_octaves)),
                 nn.Linear(pe.d_out(1), d_in),
             )
-        feed_forward_layer = partial(ConvFeedForward, cfg.self_attention)
+        feed_forward_layer = partial(ImageSelfAttentionWrapper, cfg.self_attention)
         self.transformer = Transformer(
             d_in,
             cfg.num_layers,
@@ -73,6 +73,9 @@ class EpipolarTransformer(nn.Module):
                 nn.Conv2d(d_in * 2, d_in, 7, 1, 3),
             )
 
+        if num_context_views > 2:
+            self.view_embeddings = nn.Embedding(num_context_views, d_in)
+
     def forward(
         self,
         features: Float[Tensor, "batch view channel height width"],
@@ -80,7 +83,7 @@ class EpipolarTransformer(nn.Module):
         intrinsics: Float[Tensor, "batch view 3 3"],
         near: Float[Tensor, "batch view"],
         far: Float[Tensor, "batch view"],
-    ) -> tuple[Float[Tensor, "batch view channel height width"], EpipolarSampling,]:
+    ) -> tuple[Float[Tensor, "batch view channel height width"], EpipolarSampling]:
         b, v, _, h, w = features.shape
 
         # If needed, apply downscaling.
@@ -115,15 +118,23 @@ class EpipolarTransformer(nn.Module):
                 rearrange(far, "b v -> b v () () ()"),
             )
             depths = self.depth_encoding(depths[..., None])
-            q = sampling.features + depths
+            kv = sampling.features + depths
         else:
-            q = sampling.features
+            kv = sampling.features
+
+        # Add randomly permuted per-view embeddings to the other views.
+        if v > 2:
+            shuffle = torch.randperm(v - 1, device=kv.device)
+            view_embeddings = rearrange(
+                self.view_embeddings(shuffle), "ov c -> () () ov () () c"
+            )
+            kv = kv + view_embeddings
 
         # Run the transformer.
-        kv = rearrange(features, "b v c h w -> (b v h w) () c")
+        q = rearrange(features, "b v c h w -> (b v h w) () c")
         features = self.transformer.forward(
-            kv,
-            rearrange(q, "b v () r s c -> (b v r) s c"),
+            q,
+            rearrange(kv, "b v ov r s c -> (b v r) (s ov) c"),
             b=b,
             v=v,
             h=h // self.cfg.downscale,
@@ -148,7 +159,7 @@ class EpipolarTransformer(nn.Module):
         return features, sampling
 
 
-class ConvFeedForward(nn.Module):
+class ImageSelfAttentionWrapper(nn.Module):
     def __init__(
         self,
         self_attention_cfg: ImageSelfAttentionCfg,
@@ -157,13 +168,6 @@ class ConvFeedForward(nn.Module):
         dropout: float,
     ) -> None:
         super().__init__()
-        self.layers = nn.Sequential(
-            nn.Conv2d(d_in, d_hidden, 7, 1, 3),
-            nn.GELU(),
-            nn.Dropout(dropout),
-            nn.Conv2d(d_hidden, d_in, 7, 1, 3),
-            nn.Dropout(dropout),
-        )
         self.self_attention = ImageSelfAttention(self_attention_cfg, d_in, d_in)
 
     def forward(
@@ -175,5 +179,5 @@ class ConvFeedForward(nn.Module):
         w: int,
     ) -> Float[Tensor, "batch token dim"]:
         x = rearrange(x, "(b v h w) () c -> (b v) c h w", b=b, v=v, h=h, w=w)
-        x = self.layers(self.self_attention(x) + x)
+        x = self.self_attention(x) + x
         return rearrange(x, "(b v) c h w -> (b v h w) () c", b=b, v=v, h=h, w=w)

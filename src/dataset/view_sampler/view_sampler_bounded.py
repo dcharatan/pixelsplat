@@ -58,7 +58,7 @@ class ViewSamplerBounded(ViewSampler[ViewSamplerBoundedCfg]):
 
         # Pick the gap between the context views.
         if not self.cameras_are_circular:
-            max_gap = min(num_views - 1, max_gap)
+            max_gap = min(num_views - 1, min_gap)
         min_gap = max(2 * self.cfg.min_distance_to_context_views, min_gap)
         if max_gap < min_gap:
             raise ValueError("Example does not have enough frames!")
@@ -106,14 +106,28 @@ class ViewSamplerBounded(ViewSampler[ViewSamplerBoundedCfg]):
             index_target %= num_views
             index_context_right %= num_views
 
+        # If more than two context views are desired, pick extra context views between
+        # the left and right ones.
+        if self.cfg.num_context_views > 2:
+            num_extra_views = self.cfg.num_context_views - 2
+            extra_views = []
+            while len(set(extra_views)) != num_extra_views:
+                extra_views = torch.randint(
+                    index_context_left + 1,
+                    index_context_right,
+                    (num_extra_views,),
+                ).tolist()
+        else:
+            extra_views = []
+
         return (
-            torch.tensor((index_context_left, index_context_right)),
+            torch.tensor((index_context_left, *extra_views, index_context_right)),
             index_target,
         )
 
     @property
     def num_context_views(self) -> int:
-        return 2
+        return self.cfg.num_context_views
 
     @property
     def num_target_views(self) -> int:

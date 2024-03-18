@@ -75,15 +75,14 @@ class EpipolarSampler(nn.Module):
             rearrange(far, "b v -> b v () ()"),
         )
 
-
         # Generate sample points.
         s = self.num_samples
         sample_depth = (torch.arange(s, device=device) + 0.5) / s
         sample_depth = rearrange(sample_depth, "s -> s ()")
-        xy_min = projection["xy_min"].nan_to_num(posinf=0, neginf=0) 
+        xy_min = projection["xy_min"].nan_to_num(posinf=0, neginf=0)
         xy_min = xy_min * projection["overlaps_image"][..., None]
         xy_min = rearrange(xy_min, "b v ov r xy -> b v ov r () xy")
-        xy_max = projection["xy_max"].nan_to_num(posinf=0, neginf=0) 
+        xy_max = projection["xy_max"].nan_to_num(posinf=0, neginf=0)
         xy_max = xy_max * projection["overlaps_image"][..., None]
         xy_max = rearrange(xy_max, "b v ov r xy -> b v ov r () xy")
         xy_sample = xy_min + sample_depth * (xy_max - xy_min)

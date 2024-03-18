@@ -115,14 +115,17 @@ class DatasetRE10k(IterableDataset):
                     continue
 
                 # Load the images.
-                context_images = [
-                    example["images"][index.item()] for index in context_indices
-                ]
-                context_images = self.convert_images(context_images)
-                target_images = [
-                    example["images"][index.item()] for index in target_indices
-                ]
-                target_images = self.convert_images(target_images)
+                try:
+                    context_images = [
+                        example["images"][index.item()] for index in context_indices
+                    ]
+                    context_images = self.convert_images(context_images)
+                    target_images = [
+                        example["images"][index.item()] for index in target_indices
+                    ]
+                    target_images = self.convert_images(target_images)
+                except IndexError:
+                    continue
 
                 # Skip the example if the images don't have the right shape.
                 context_image_invalid = context_images.shape[1:] != (3, 360, 640)

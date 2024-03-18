@@ -1,0 +1,31 @@
+# @package _global_
+
+defaults:
+  - override /dataset: re10k
+  - override /model/encoder: epipolar
+  - override /model/encoder/backbone: dino
+  - override /loss: [mse, lpips]
+
+wandb:
+  name: re10k_3_view
+  tags: [re10k, 256x256]
+
+dataset:
+  image_shape: [256, 256]
+  roots: [datasets/re10k]
+
+  # Ablation: Use 3 context views and double the distance between context views (since
+  # there's another context view ~halfway between the left and right views).
+  view_sampler:
+    num_context_views: 3
+    initial_min_distance_between_context_views: 50
+    initial_max_distance_between_context_views: 90
+    min_distance_between_context_views: 90
+    max_distance_between_context_views: 384
+
+data_loader:
+  train:
+    batch_size: 7
+
+trainer:
+  max_steps: 300_001
