@@ -2,9 +2,9 @@ import os
 from pathlib import Path
 from typing import Any, Optional
 
+from lightning.pytorch.loggers.logger import Logger
+from lightning.pytorch.utilities import rank_zero_only
 from PIL import Image
-from pytorch_lightning.loggers.logger import Logger
-from pytorch_lightning.utilities import rank_zero_only
 
 LOG_PATH = Path("outputs/local")
 

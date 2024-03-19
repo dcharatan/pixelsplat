@@ -461,7 +461,6 @@ def generate_point_cloud_figure(cfg_dict):
         print("Saving Composite!")
         save_image(image, "sampling_figure/density.png")
 
-        a = 1
 
 
 if __name__ == "__main__":

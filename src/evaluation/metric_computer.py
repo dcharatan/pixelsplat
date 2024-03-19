@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 import torch
-from pytorch_lightning import LightningModule
+from lightning.pytorch import LightningModule
 from tabulate import tabulate
 
 from ..misc.image_io import load_image, save_image

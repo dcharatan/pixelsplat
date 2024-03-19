@@ -4,7 +4,7 @@ from pathlib import Path
 
 import torch
 from einops import rearrange
-from pytorch_lightning import LightningModule
+from lightning.pytorch import LightningModule
 from tqdm import tqdm
 
 from ..geometry.epipolar_lines import project_rays

@@ -6,10 +6,11 @@ import torch
 import wandb
 from colorama import Fore
 from jaxtyping import install_import_hook
+from lightning.pytorch import Trainer
+from lightning.pytorch.callbacks import LearningRateMonitor, ModelCheckpoint
+from lightning.pytorch.loggers.wandb import WandbLogger
+from lightning.pytorch.plugins.environments import SLURMEnvironment
 from omegaconf import DictConfig, OmegaConf
-from pytorch_lightning import Trainer
-from pytorch_lightning.callbacks import LearningRateMonitor, ModelCheckpoint
-from pytorch_lightning.loggers.wandb import WandbLogger
 
 # Configure beartype and jaxtyping.
 with install_import_hook(
@@ -100,6 +101,7 @@ def train(cfg_dict: DictConfig):
         enable_progress_bar=False,
         gradient_clip_val=cfg.trainer.gradient_clip_val,
         max_steps=cfg.trainer.max_steps,
+        plugins=[SLURMEnvironment(auto_requeue=False)],
     )
     torch.manual_seed(cfg_dict.seed + trainer.global_rank)
 

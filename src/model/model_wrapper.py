@@ -7,9 +7,9 @@ import torch
 import wandb
 from einops import pack, rearrange, repeat
 from jaxtyping import Float
-from pytorch_lightning import LightningModule
-from pytorch_lightning.loggers.wandb import WandbLogger
-from pytorch_lightning.utilities import rank_zero_only
+from lightning.pytorch import LightningModule
+from lightning.pytorch.loggers.wandb import WandbLogger
+from lightning.pytorch.utilities import rank_zero_only
 from torch import Tensor, nn, optim
 
 from ..dataset.data_module import get_data_shim

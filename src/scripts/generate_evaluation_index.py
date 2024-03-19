@@ -3,8 +3,8 @@ from dataclasses import dataclass
 import hydra
 import torch
 from jaxtyping import install_import_hook
+from lightning.pytorch import Trainer
 from omegaconf import DictConfig
-from pytorch_lightning import Trainer
 
 # Configure beartype and jaxtyping.
 with install_import_hook(

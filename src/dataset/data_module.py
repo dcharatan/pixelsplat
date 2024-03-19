@@ -4,7 +4,7 @@ from typing import Callable
 
 import numpy as np
 import torch
-from pytorch_lightning import LightningDataModule
+from lightning.pytorch import LightningDataModule
 from torch import Generator, nn
 from torch.utils.data import DataLoader, Dataset, IterableDataset
 
