@@ -7,7 +7,7 @@ defaults:
 
 wandb:
   project: pixelsplat
-  entity: your-entity-here
+  entity: scene-representation-group
   name: placeholder
   mode: disabled
 
