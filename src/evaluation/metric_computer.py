@@ -22,7 +22,7 @@ class MetricComputer(LightningModule):
     def test_step(self, batch, batch_idx):
         scene = batch["scene"][0]
         b, cv, _, _, _ = batch["context"]["image"].shape
-        assert b == 1 and cv == 2
+        assert b == 1
         _, v, _, _, _ = batch["target"]["image"].shape
 
         # Skip scenes.

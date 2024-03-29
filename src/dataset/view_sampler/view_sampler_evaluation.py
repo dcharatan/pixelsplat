@@ -12,6 +12,7 @@ from ...evaluation.evaluation_index_generator import IndexEntry
 from ...global_cfg import get_cfg
 from ...misc.step_tracker import StepTracker
 from ..types import Stage
+from .three_view_hack import add_third_context_index
 from .view_sampler import ViewSampler
 
 
@@ -61,9 +62,7 @@ class ViewSamplerEvaluation(ViewSampler[ViewSamplerEvaluationCfg]):
         # Handle 2-view index for 3 views.
         v = get_cfg()["dataset"]["view_sampler"]["num_context_views"]
         if v > len(context_indices) and v == 3:
-            a, b = context_indices
-            context_indices = torch.cat((context_indices, (2 * b - a)[None]))
-            target_indices = torch.cat((target_indices, target_indices + b - a))
+            context_indices = add_third_context_index(context_indices)
 
         return context_indices, target_indices
 
