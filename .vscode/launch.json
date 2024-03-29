@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "Train (Debug)",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.main",
             "console": "integratedTerminal",
@@ -25,7 +25,7 @@
         },
         {
             "name": "Test (Debug)",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.main",
             "console": "integratedTerminal",
@@ -46,7 +46,7 @@
         },
         {
             "name": "Visualize Epipolar Lines",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.scripts.visualize_epipolar_lines",
             "console": "integratedTerminal",
@@ -62,7 +62,7 @@
         },
         {
             "name": "Test Splatter",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.scripts.test_splatter",
             "console": "integratedTerminal",
@@ -74,7 +74,7 @@
         },
         {
             "name": "Generate Evaluation Index",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.scripts.generate_evaluation_index",
             "console": "integratedTerminal",
@@ -90,7 +90,7 @@
         },
         {
             "name": "Compute Metrics",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.scripts.compute_metrics",
             "console": "integratedTerminal",
@@ -105,7 +105,7 @@
         },
         {
             "name": "Paper: Generate Comparison Table",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.paper.generate_comparison_table",
             "console": "integratedTerminal",
@@ -117,7 +117,7 @@
         },
         {
             "name": "Paper: Generate Image Comparison",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.paper.generate_image_comparison",
             "console": "integratedTerminal",
@@ -125,7 +125,7 @@
         },
         {
             "name": "Paper: Generate Ablation Image Comparison",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.paper.generate_ablation_image_comparison",
             "console": "integratedTerminal",
@@ -137,7 +137,7 @@
         },
         {
             "name": "Paper: Generate Epipolar Sampling Figure",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.paper.generate_epipolar_sampling_figure",
             "console": "integratedTerminal",
@@ -149,7 +149,7 @@
         },
         {
             "name": "Paper: Generate Point Cloud Figure",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.paper.generate_point_cloud_figure",
             "console": "integratedTerminal",
@@ -161,7 +161,7 @@
         },
         {
             "name": "Paper: Generate Sampling Figure",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.paper.generate_sampling_figure",
             "console": "integratedTerminal",
@@ -173,7 +173,7 @@
         },
         {
             "name": "Paper: Generate Attention Figure",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.paper.generate_attention_figure",
             "console": "integratedTerminal",
@@ -185,7 +185,7 @@
         },
         {
             "name": "Paper: Generate Benchmark Table",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.paper.generate_benchmark_table",
             "console": "integratedTerminal",
@@ -197,7 +197,7 @@
         },
         {
             "name": "Generate Video Evaluation Index",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.scripts.generate_video_evaluation_index",
             "console": "integratedTerminal",
@@ -206,7 +206,7 @@
         },
         {
             "name": "Dump Launch Configurations",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "src.scripts.dump_launch_configs",
             "console": "integratedTerminal",
