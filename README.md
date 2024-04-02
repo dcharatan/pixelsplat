@@ -131,9 +131,12 @@ Since the original release of the pixelSplat codebase, the following bugs have b
 
 ## Related Papers
 
-Check out the following papers that build on top of pixelSplat:
+Check out the following papers that build on top of pixelSplat's codebase:
 
-- *MVSplat: Efficient 3D Gaussian Splatting from Sparse Multi-View Images* by Yuedong Chen et al. ([webpage](https://donydchen.github.io/mvsplat/), [code](https://github.com/donydchen/mvsplat)): This method solves the same problem as pixelSplat using plane sweeping/cost volumes. This yields slightly better novel view synthesis results, much cleaner 3D Gaussian point clouds, and improved cross-dataset generalization. The codebase is largely based on this one.
+- *MVSplat: Efficient 3D Gaussian Splatting from Sparse Multi-View Images* by Yuedong Chen et al. ([webpage](https://donydchen.github.io/mvsplat/), [code](https://github.com/donydchen/mvsplat)): This method solves the same problem as pixelSplat using plane sweeping/cost volumes. This yields slightly better novel view synthesis results, much cleaner 3D Gaussian point clouds, and improved cross-dataset generalization.
+- *latentSplat: Autoencoding Variational Gaussians for Fast Generalizable 3D Reconstruction* by Christopher Wewer et al. ([webpage](https://geometric-rl.mpi-inf.mpg.de/latentsplat/)): This is a generative model built on top of pixelSplat. It predicts semantic Gaussians in 3D space, splats them into 2D, and then converts the resulting 2D features into images using a 2D generative model.
+
+If you used ideas or code from pixelSplat and would like to be featured here, send an email to charatan@mit.edu!
 
 ## BibTeX
 
