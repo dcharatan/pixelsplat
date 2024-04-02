@@ -129,6 +129,12 @@ Since the original release of the pixelSplat codebase, the following bugs have b
 - The LPIPS loss was using the wrong input range (0 to 1 instead of -1 to 1). Results should be slightly better with this fixed. Thank you to Katja Schwarz for finding this bug!
 - The view sampler at `src/dataset/view_sampler/view_sampler_bounded.py` was incorrectly using `min_gap` in place of `max_gap` during training. This bug has been fixed, and the training configurations have been updated to reflect the unintended behavior, so this shouldn't affect the results. Note that views sampled during evaluation are chosen differently, so those were not affected. Thank you to Chris Wewer for finding this bug!
 
+## Related Papers
+
+Check out the following papers that build on top of pixelSplat:
+
+- *MVSplat: Efficient 3D Gaussian Splatting from Sparse Multi-View Images* by Yuedong Chen et al. ([webpage](https://donydchen.github.io/mvsplat/), [code](https://github.com/donydchen/mvsplat)): This method solves the same problem as pixelSplat using plane sweeping/cost volumes. This yields slightly better novel view synthesis results, much cleaner 3D Gaussian point clouds, and improved cross-dataset generalization. The codebase is largely based on this one.
+
 ## BibTeX
 
 ```
