@@ -19,7 +19,7 @@ data_loader:
     batch_size: 7
 
 trainer:
-  max_steps: 400_001
+  max_steps: 350_001
 
 loss:
   depth:

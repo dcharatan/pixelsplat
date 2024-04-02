@@ -124,6 +124,14 @@
             "justMyCode": true,
         },
         {
+            "name": "Paper: Generate 3 View Image Comparison",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.paper.generate_3_view_image_comparison",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+        },
+        {
             "name": "Paper: Generate Ablation Image Comparison",
             "type": "debugpy",
             "request": "launch",

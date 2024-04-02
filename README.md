@@ -6,6 +6,22 @@ Check out the [project website here](https://dcharatan.github.io/pixelsplat). We
 
 https://github.com/dcharatan/pixelsplat/assets/13124225/de90101e-1bb5-42e4-8c5b-35922cae8f64
 
+## Camera-ready Updates
+
+This version of the codebase has been updated slightly to reflect the CVPR camera-ready version of the paper (and the latest version of the paper on arXiv). Here are the changes:
+
+* The models have all been retrained with small bug fixes and a slight architectural improvement (per-image self-attention + convolution has been replaced with only per-image self-attention in the epipolar transformer). This has improved the results slightly across the board:
+
+| Run Name      | PSNR  | SSIM  | LPIPS |
+| :------------ | ----: | ----: | ----: |
+| `re10k` (old) | 25.89 | 0.858 | 0.142 |
+| `re10k` (new) | 26.09 | 0.863 | 0.136 |
+| `acid` (old)  | 28.14 | 0.839 | 0.150 |
+| `acid` (new)  | 28.27 | 0.843 | 0.146 |
+
+* A configuration for 3-view pixelSplat has been added. In general, it's now possible to run pixelSplat with an arbitrary number of views, although you'll need a lot of GPU memory to do so.
+* The original version of the code base can be found at commit `787a8896deb232ec652426bf157f9679d4046c3c`.
+
 ## Installation
 
 To get started, create a virtual environment using Python 3.10+:
@@ -50,7 +66,7 @@ If you would like to convert downloaded versions of the Real Estate 10k and ACID
 
 ## Acquiring Pre-trained Checkpoints
 
-You can find pre-trained checkpoints [here](https://drive.google.com/drive/folders/18nGNWIn8RN0aEWLR6MC2mshAkx2uN6fL?usp=sharing).
+You can find pre-trained checkpoints [here](https://drive.google.com/drive/folders/1ZYInQyBHav979dH7arITG8Z-wTSR_Bkm?usp=sharing). You can find the checkpoints for the original codebase (without the improvements from the camera-ready version of the paper) [here](https://drive.google.com/drive/folders/18nGNWIn8RN0aEWLR6MC2mshAkx2uN6fL?usp=sharing).
 
 ## Running the Code
 
