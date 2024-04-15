@@ -108,7 +108,7 @@ You can run the ablations from the paper by using the corresponding experiment c
 python3 -m src.main +experiment=re10k_ablation_no_epipolar_transformer
 ```
 
-Our collection of pre-trained [checkpoints](https://drive.google.com/drive/folders/18nGNWIn8RN0aEWLR6MC2mshAkx2uN6fL?usp=sharing) includes checkpoints for the ablations.
+Our collection of pre-trained [checkpoints](https://drive.google.com/drive/folders/1ZYInQyBHav979dH7arITG8Z-wTSR_Bkm?usp=sharing) includes checkpoints for the ablations.
 
 ### VS Code Launch Configuration
 
