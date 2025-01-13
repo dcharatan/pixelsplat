@@ -10,7 +10,7 @@ __pycache__/
 # Data file 
 *.jpg
 *.png
-
+*.pth
 
 
 

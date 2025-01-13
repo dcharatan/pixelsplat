@@ -36,7 +36,9 @@ from ..visualization.validation_in_3d import render_cameras, render_projections
 from .decoder.decoder import Decoder, DepthRenderingMode
 from .encoder import Encoder
 from .encoder.visualization.encoder_visualizer import EncoderVisualizer
-from einops import repeat
+from ..model.types import Gaussians
+
+
 
 
 @dataclass
@@ -178,7 +180,28 @@ class Model_4d(LightningModule):
         return example
         
         
+    def get_mask_indices(self, mask: Tensor) -> list:
+        # mask b v c h w 
+        #      1 2 1 176 320
+        # "b v r srf spp xyz -> b (v r srf spp) xyz",
+        # print(f"----shape of mask {mask.shape}")
+        mask = rearrange(mask, "b v c h w -> b v (h w) c")
+        mask = repeat(mask,    "b v r c ->   b (v r p) c ", p=3)
+
+        b, n, c  = mask.shape
+        mask = mask.squeeze(0)
+        mask = mask.squeeze(1)
+        indices = torch.nonzero(mask)
+        dynamic = indices.squeeze(1)
+        # dynamic = indices[:,1]  # indices for those pixel in the mask
         
+        scene = torch.ones(n)
+        scene[dynamic] = False
+        
+        static = torch.nonzero(scene).squeeze(1)
+        # print(f"----shape of static {static.shape}")
+
+        return [static, dynamic]
     
     
     def training_step(self, batch, batch_idx):
@@ -227,15 +250,66 @@ class Model_4d(LightningModule):
 
         return total_loss
 
+
+    def select_gaussians(self, gaussians, mask):
+        gaussians.means = gaussians.means[:, mask,...]
+        gaussians.covariances = gaussians.covariances[:, mask,...]  
+        gaussians.harmonics =   gaussians.harmonics[:, mask,...]
+        gaussians.opacities =   gaussians.opacities[:, mask]
+        return gaussians  
+
+    def combine_gaussians(self,set1, set2):
+        means = torch.cat([set1.means, set2.means], dim=1)
+        covariances = torch.cat([set1.covariances, set2.covariances], dim=1)
+        harmonics = torch.cat([set1.harmonics, set2.harmonics], dim=1)
+        opacities = torch.cat([set1.opacities, set2.opacities], dim=1)
+        return Gaussians(
+            means,
+            covariances,
+            harmonics,
+            opacities,
+        )
+
+    def copy_gaussians(self, gaussians):
+        return Gaussians(
+            gaussians.means.clone(),
+            gaussians.covariances.clone(),
+            gaussians.harmonics.clone(),
+            gaussians.opacities.clone(),
+        )
+    
+
     def test_step(self, batch_video, batch_idx):        
         frames = batch_video["t"]
         print(batch_video["context"]["far"].shape)
         
-        for t in range(frames):
-            batch = self.mini_batch(batch_video, t)
+        
+        batch: BatchedExample = self.mini_batch(batch_video, 0)
+        batch = self.data_shim(batch)
+        static, dynamic = self.get_mask_indices(batch["context"]["mask"])
 
-            batch: BatchedExample = self.data_shim(batch)
+        b, v, _, h, w = batch["target"]["image"].shape
+        device = batch["target"]["image"].device
+        dynamic.to(device)
+        assert b == 1
+
+        # Render Gaussians.
+        with self.benchmarker.time("encoder"):
+            gaussians = self.encoder(
+                batch["context"],
+                self.global_step,
+                deterministic=False,
+            )
+        static = self.select_gaussians(gaussians, static)
+        
+        for t in range(frames):
+            batch: BatchedExample = self.mini_batch(batch_video, t)
+            batch = self.data_shim(batch)
+            _, dynamic = self.get_mask_indices(batch["context"]["mask"])
+
             b, v, _, h, w = batch["target"]["image"].shape
+            device = batch["target"]["image"].device
+            dynamic.to(device)
             assert b == 1
 
             # Render Gaussians.
@@ -245,7 +319,16 @@ class Model_4d(LightningModule):
                     self.global_step,
                     deterministic=False,
                 )
-            
+
+            gaussians_dynamic = self.select_gaussians(gaussians, dynamic)
+            # z = gaussians_dynamic.means[:,:,2]/2
+            # gaussians_dynamic.means[:,:,2] = z
+
+            gaussians_dynamic.opacities = gaussians_dynamic.opacities * 2
+            gaussians = self.combine_gaussians(static, gaussians_dynamic)
+
+                
+                     
             with self.benchmarker.time("decoder", num_calls=v):
                 color = []
                 for i in range(0, batch["target"]["far"].shape[1], 32):

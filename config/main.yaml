@@ -8,7 +8,7 @@ defaults:
 wandb:
   project: pixelsplat
   entity: scene-representation-group
-  name: dynamic
+  name: dynamic_opacity2
   mode: disabled
 
 mode: test
